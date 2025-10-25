@@ -10,7 +10,7 @@ Major studio films dominate the film industry, making the thousands of quality i
 
 With our project, **we aim to build a recommendation system that suggests movies to users based on their preferences to make the process of finding movies that you’d want to watch simpler.** 
 
-# References 📑
+## References 📑
 
 ```
 Oluchi. (2024). The Impact of Streaming Platforms on the Indie Film Industry. Prazzleinc. Retrieved from https://www.prazzleinc.com/editorial/the-imp act-of-streaming-platforms-on-the-indie-film-industry
