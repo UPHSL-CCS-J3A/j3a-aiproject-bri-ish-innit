@@ -1,6 +1,13 @@
 # Movie Recommender System 🎬 
 ![CineCompass Logo](https://github.com/UPHSL-CCS-J3A/j3a-aiproject-bri-ish-innit/blob/a49940053b2043a19b05d03cd722b4091dc3830a/CineCompass%20Logo.png)
 
+- **Content-based Filtering Approach**
+    - CineCompass will use a profiling system that analyzes multiple dimensions beyond just descriptions like genre, dialogue, and movie content.
+- **Anti-bias Measures**
+    - CineCompass will not consider ratings count or revenue. We will ensure that our recommendations include indie, foreign, and classic films.
+- **User profiling & preferences**
+    - CineCompass will use preferences set by the user, like genre preferences (likes/dislikes), favorite actors/directors, etc.
+
 ## Problem Description 🎯
 According to Skaih in 2025, there are now recorded to be at least 698,754 published in the entire world. We live in a world full of media being released every single day, with some movies published in different studios or published in indie scenes, with different genres and different languages. There's simply too much media that one can consume, and we can get overwhelmed with the amount of choices that we can choose from.
 
@@ -10,7 +17,12 @@ Major studio films dominate the film industry, making the thousands of quality i
 
 With our project, **we aim to build a recommendation system that suggests movies to users based on their preferences to make the process of finding movies that you’d want to watch simpler.** 
 
-## PEAS Model
+## AI Concepts 🤖
+The movie recommender system will use an **intelligent agent** because it continuously interacts with its environment to provide personalized movie suggestions. It senses user preferences, viewing history, and movie data to understand the user’s interests. Using this information, the system decides which movies to recommend by analyzing patterns and matching user tastes with movie features. It then acts by displaying recommendations through the user interface or sending notifications. 
+
+The system also includes a **learning and decision component**, which allows it to improve over time by learning from user behavior, feedback, and interactions. This component enables the agent to adapt its recommendations, becoming more accurate, relevant, and personalized as it gains more data about the user and the movies they enjoy. 
+
+## PEAS Model ⚙️
 
 ![PEAS Model](https://github.com/UPHSL-CCS-J3A/j3a-aiproject-bri-ish-innit/blob/cbe21afff28a4a28a84055eead81e63daefa076e/CineCompass%20PEAS%20Model.png)
 
@@ -57,6 +69,10 @@ With our project, **we aim to build a recommendation system that suggests movies
     - From how the user rated the movies that were recommended to them by the system.
     - Allows for constant improvement of recommendations over time.
 
+## System Architecture
+
+![System Architecture](https://github.com/UPHSL-CCS-J3A/j3a-aiproject-bri-ish-innit/blob/57bd3fe6a1fa7f94489e973d72317bbe389b2aff/CineCompass%20System%20Architecture.png)
+
 ## References 📑
 
 ```
@@ -65,5 +81,7 @@ Pilat, D., Krastev, S. (2024). The Paradox of Choice. The Decision Lab. Retrieve
 Shaikh, E. (2025). How Many Movies Are There [2025 Global Data]. SimpleBeen. Retrieved from https://simplebeen.com/how-many-movies-are-there/
 Shaw, L. (2023). Indie Films Are the Latest Casualty of the Streaming Wars. Bloomberg. Retrieved from https://www.bloomberg.com/news/newsletters/2023-06- 04/indie-films-are-the-latest-casualty-of-the-streaming-wars
 ```
+
+[![Open Canva Presentation](https://github.com/UPHSL-CCS-J3A/j3a-aiproject-bri-ish-innit/blob/8d8f7ae7a78eed47d37fa8527092fec0ae6bd93c/Canva%20Button.png)](https://www.canva.com/design/DAG2xoarzhk/0Ykx2p0Mq6-8uiOv3TSFWA/view?utm_content=DAG2xoarzhk&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h18346ede8e)
 
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=21283204&assignment_repo_type=AssignmentRepo)
