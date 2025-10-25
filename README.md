@@ -31,14 +31,12 @@ The system also includes a **learning and decision component**, which allows it 
     - Measures how accurate the system will predict what users will like.
     - Ensures users will see movies that the system thinks they are likely to enjoy
 - **Diversity of movies that are available**
-    - The system will recommend a wide range of movie genres.
-    - Prevents redundancies
+    - The system provides recommendations across a wide range of genres to prevent redundancy
+      and introduce users to new content.
 - **Filtering of movies**
     - The system can also recommend filtered movies based on the user’s specified preferences.
-
 - **User History/Logging**
-    - Record what the user has watched
-    - Keeps track of what the user will watch in the future
+    - Tracks movies watched and maintains a history for better future recommendations.
 
 ### 2. ENVIRONMENT:
 - User profiles, preferences, watch history
