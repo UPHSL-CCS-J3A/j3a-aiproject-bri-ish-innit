@@ -32,7 +32,7 @@ const CardList = ({ title, category }) => {
       <h2 className="pt-10 pb-5 text-lg font-medium">{title}</h2>
 
       <Swiper slidesPerView={"auto"} spaceBetween={10} className="mySwiper">
-        {data.map((item, index) => (
+        {data?.map((item, index) => (
           <SwiperSlide key={index} className="max-w-72">
             <Link to={`/movie/${item.id}`}>
             <img
