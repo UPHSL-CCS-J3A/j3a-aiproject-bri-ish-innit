@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 import backgroundImage from '/Background_banner.jpg'
+import { useAuthStore } from '../store/authStore';
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const {signup, isLoading, error} = useAuthStore();
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    
+    try{
+      await signup(username, email, password);
+      navigate("/");
+    }catch(error){
+      console.log(error);
+    }
+  };
 
 
   return (
@@ -15,10 +28,10 @@ const SignUp = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center'
     }}>
-        <div className='max-w-[450px] w-full bg-black bg-opacity-75 rounded px-8 py-14 mx-auto mt-8'>
+        <div className='max-w-[450px] w-full bg-black bg-opacity-75 rounded px-8 py-14 rounded-lg mt-40 ml-180 mt-8'>
             <h1 className='text-3xl font-medium text-white mb-7'>Sign Up</h1>
 
-            <form className='flex flex-col spacey-4'>
+            <form onSubmit={handleSignUp} className='flex flex-col spacey-4'>
                 <input 
                 type="text" 
                 placeholder="Dewey Donuts" 
@@ -40,8 +53,9 @@ const SignUp = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className='w-full h-[50px] bg-[#333] text-gray-300 rounded px-5 text-base mt-4' />
 
+                {error && <p className='text-red-500'>{error}</p>}
 
-                <button type="submit" className='w-full bg-[#e50914] text-white font-semibold py-3 rounded mt-6 hover:opacity-90 cursor-pointer'>
+                <button type="submit" disabled={isLoading} className='w-full bg-[#0f52ba] text-white font-semibold py-3 rounded mt-6 hover:opacity-90 cursor-pointer'>
                     Sign Up
                 </button>
             </form>

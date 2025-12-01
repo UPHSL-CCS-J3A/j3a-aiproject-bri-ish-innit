@@ -4,10 +4,26 @@ import Homepage from './pages/Homepage'
 import MoviePage from './pages/Moviepage'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
+import { Toaster } from 'react-hot-toast';
+import { useAuthStore } from './store/authStore';
+import { useEffect } from 'react'
+import AIRecommendations from './pages/AIRecommendations'
+
 
 const App = () => {
+  const {fetchUser, fetchingUser} = useAuthStore();
+
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser])
+
+  if(fetchingUser){
+   return <p>Loading...</p>
+  }
+
   return (
     <div>
+      <Toaster />
       <Navbar />
 
       <Routes>
@@ -15,6 +31,7 @@ const App = () => {
         <Route path={"/movie/:id"} element={<MoviePage />} />
         <Route path={"/signin"} element={<SignIn />} />
         <Route path={"/signup"} element={<SignUp />} />
+        <Route path={"/ai-recommendations"} element={<AIRecommendations />} />
       </Routes>
     </div>
   )
