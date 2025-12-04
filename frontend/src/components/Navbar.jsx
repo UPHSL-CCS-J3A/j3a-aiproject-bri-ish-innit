@@ -29,13 +29,12 @@ const Navbar = () => {
 
 
         <ul className='hidden xl:flex space-x-6'>
-            <li className='cursor-pointer hover:text-white transition-colors duration-200'>Home</li>
-            <li className='cursor-pointer hover:text-white transition-colors duration-200'>TV Shows</li>
-            <li className='cursor-pointer hover:text-white transition-colors duration-200'>Movies</li>
-            <li className='cursor-pointer hover:text-white transition-colors duration-200'>Anime</li>
-            <li className='cursor-pointer hover:text-white transition-colors duration-200'>Games</li>
-            <li className='cursor-pointer hover:text-white transition-colors duration-200'>New & Popular</li>
-            <li className='cursor-pointer hover:text-white transition-colors duration-200'>Upcoming</li>
+            <li><Link to="/" className='cursor-pointer hover:text-white transition-colors duration-200'>Home</Link></li>
+            <li><Link to="/tv-shows" className='cursor-pointer hover:text-white transition-colors duration-200'>TV Shows</Link></li>
+            <li><Link to="/movies" className='cursor-pointer hover:text-white transition-colors duration-200'>Movies</Link></li>
+            <li><Link to="/anime" className='cursor-pointer hover:text-white transition-colors duration-200'>Anime</Link></li>
+            <li><Link to="/new-popular" className='cursor-pointer hover:text-white transition-colors duration-200'>New & Popular</Link></li>
+            <li><Link to="/upcoming" className='cursor-pointer hover:text-white transition-colors duration-200'>Upcoming</Link></li>
         </ul>
 
 
