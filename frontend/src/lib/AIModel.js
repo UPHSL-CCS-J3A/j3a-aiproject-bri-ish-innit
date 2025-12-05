@@ -29,6 +29,12 @@ export async function getAIRecommendations(prompt) {
         return result;
     } catch (error) {
         console.error("Error in AI function:", error);
+        
+        // Handle quota exceeded error specifically
+        if (error.message && error.message.includes('quota')) {
+            return 'QUOTA_EXCEEDED';
+        }
+        
         return null;
     }
 }

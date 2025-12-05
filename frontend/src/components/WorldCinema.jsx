@@ -116,6 +116,7 @@ const WorldCinema = ({ allowAdultContent = false }) => {
           spaceBetween={20} 
           className="mySwiper"
           onSwiper={setSwiperRef}
+          loop={true}
         >
         <button 
           onClick={() => swiperRef?.slideNext()}
@@ -130,6 +131,9 @@ const WorldCinema = ({ allowAdultContent = false }) => {
               src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`}
               alt=""
               className="h-44 w-full object-center object-cover shadow-md"
+              onError={(e) => {
+                e.target.src = item.poster_path ? `https://image.tmdb.org/t/p/w500/${item.poster_path}` : '/placeholder-movie.jpg';
+              }}
             />
             <div className="text-left pt-2">
               <p className="font-medium mb-1">{item.title}</p>
@@ -137,8 +141,6 @@ const WorldCinema = ({ allowAdultContent = false }) => {
                 <span>⭐ {item.vote_average?.toFixed(1)}</span>
                 <span>•</span>
                 <span>{item.release_date?.slice(0, 4)}</span>
-                <span>•</span>
-                <span className="text-xs bg-blue-600 px-2 py-1 rounded-full">WORLD</span>
               </div>
             </div>
             </Link>

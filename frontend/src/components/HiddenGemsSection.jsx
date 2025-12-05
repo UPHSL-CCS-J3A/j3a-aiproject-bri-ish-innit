@@ -119,6 +119,9 @@ const HiddenGemsSection = ({ allowAdultContent = false, supportIndie = true, use
                     src={`https://image.tmdb.org/t/p/w780/${featuredMovie.backdrop_path}`}
                     alt={featuredMovie.title}
                     className="w-full h-48 md:h-64 object-cover"
+                    onError={(e) => {
+                      e.target.src = featuredMovie.poster_path ? `https://image.tmdb.org/t/p/w780/${featuredMovie.poster_path}` : '/placeholder-movie.jpg';
+                    }}
                   />
                 </div>
               
@@ -165,6 +168,7 @@ const HiddenGemsSection = ({ allowAdultContent = false, supportIndie = true, use
             spaceBetween={20} 
             className="mySwiper"
             onSwiper={setSwiperRef}
+            loop={true}
           >
             <button 
               onClick={() => swiperRef?.slideNext()}
@@ -179,6 +183,9 @@ const HiddenGemsSection = ({ allowAdultContent = false, supportIndie = true, use
                     src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`}
                     alt=""
                     className="h-44 w-full object-center object-cover shadow-md"
+                    onError={(e) => {
+                      e.target.src = item.poster_path ? `https://image.tmdb.org/t/p/w500/${item.poster_path}` : '/placeholder-movie.jpg';
+                    }}
                   />
                   <div className="text-left pt-2">
                     <p className="font-medium mb-1">{item.title}</p>
@@ -186,8 +193,6 @@ const HiddenGemsSection = ({ allowAdultContent = false, supportIndie = true, use
                       <span>⭐ {item.vote_average?.toFixed(1)}</span>
                       <span>•</span>
                       <span>{item.release_date?.slice(0, 4)}</span>
-                      <span>•</span>
-                      <span className="text-xs bg-green-600 px-2 py-1 rounded-full">INDIE</span>
                     </div>
                   </div>
                 </Link>

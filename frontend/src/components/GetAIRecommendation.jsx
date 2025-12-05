@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Search } from 'lucide-react'
 import LiquidEther from './LiquidEther'
 
 const allGenres = [
@@ -17,6 +17,8 @@ const GetAIRecommendation = ({ isLoading }) => {
   const [genres] = useState(() => getRandomGenres());
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [showScrollArrow, setShowScrollArrow] = useState(true);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchError, setSearchError] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +39,32 @@ const GetAIRecommendation = ({ isLoading }) => {
         ? prev.filter(g => g !== genre)
         : [...prev, genre]
     );
+  };
+  
+  const validateAndSearch = () => {
+    if (!searchInput.trim()) {
+      setSearchError('Please enter some genres to search');
+      return;
+    }
+    
+    const inputGenres = searchInput
+      .split(',')
+      .map(genre => genre.trim())
+      .filter(genre => genre.length > 0);
+    
+    if (inputGenres.length === 0) {
+      setSearchError('Please enter valid genres separated by commas');
+      return;
+    }
+    
+    setSearchError('');
+    navigate(`/ai-recommendations?genres=${inputGenres.join(',')}`);
+  };
+  
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      validateAndSearch();
+    }
   };
 
   const liquidEtherComponent = useMemo(() => (
@@ -60,7 +88,32 @@ const GetAIRecommendation = ({ isLoading }) => {
           <div className='animate-spin rounded-full h-16 w-16 border-b-2 border-white'></div>
         ) : (
           <div className='flex flex-col justify-center items-center p-8 opacity-0 animate-fade-in'>
-            <img src='/cinecompass-main.png' alt='CineCompass' className='max-w-4xl h-auto mb-8' />
+            <img src='/cinecompass-main.png' alt='CineCompass' className='max-w-4xl h-auto mb-6' />
+            
+            <div className='w-full max-w-md mb-8'>
+              <div className='relative'>
+                <input
+                  type='text'
+                  value={searchInput}
+                  onChange={(e) => {
+                    setSearchInput(e.target.value);
+                    setSearchError('');
+                  }}
+                  onKeyPress={handleSearchKeyPress}
+                  placeholder='Search (e.g. Horror, Anime, Documentary, etc.)'
+                  className='w-full bg-transparent border-b-2 border-white/50 focus:border-white outline-none pb-2 pr-10 text-white placeholder-white/70 text-center'
+                />
+                <button
+                  onClick={validateAndSearch}
+                  className='absolute right-0 bottom-2 text-white/70 hover:text-white transition-colors'
+                >
+                  <Search size={20} />
+                </button>
+              </div>
+              {searchError && (
+                <p className='text-red-300 text-sm mt-2 text-center'>{searchError}</p>
+              )}
+            </div>
             
             <div className='flex flex-wrap gap-3 justify-center max-w-4xl'>
               {genres.map((genre) => (

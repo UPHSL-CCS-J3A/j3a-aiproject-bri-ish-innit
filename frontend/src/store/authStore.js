@@ -101,5 +101,20 @@ export const useAuthStore = create((set) => ({
 
     updateUser: (updatedUser) => {
         set({ user: updatedUser });
+    },
+
+    movieAction: async (movieId, action) => {
+        try {
+            const response = await axios.post(`${API_URL}/movie-action`, {
+                movieId,
+                action
+            });
+            
+            set({ user: response.data.user });
+            return response.data.added;
+        } catch (error) {
+            console.error('Movie action error:', error);
+            throw error;
+        }
     }
 }));

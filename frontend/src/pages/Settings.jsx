@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { User, Camera, Tag, Save, ChevronDown } from 'lucide-react'
+import { User, Camera, Tag, Save, ChevronDown, RefreshCw } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/authStore'
+import { useNavigate } from 'react-router-dom'
 
 const Settings = () => {
   const { user, updateUser } = useAuthStore()
+  const navigate = useNavigate()
   const [localUser, setLocalUser] = useState(null)
   const [profilePicture, setProfilePicture] = useState('')
   const [displayName, setDisplayName] = useState('')
@@ -245,6 +247,18 @@ const Settings = () => {
                 <p className='text-gray-400 text-xs'>Include mature/adult-rated films in recommendations</p>
               </div>
             </label>
+          </div>
+
+          {/* Retake Questionnaire */}
+          <div>
+            <button
+              onClick={() => navigate('/ai-recommendations')}
+              className='w-full bg-gradient-to-r from-[#7a051d] to-[#d2172d] hover:from-[#8a061e] hover:to-[#e2182e] text-white py-3 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2'
+            >
+              <RefreshCw size={20} />
+              Retake Questionnaire
+            </button>
+            <p className='text-gray-400 text-xs mt-2'>Update your movie preferences by retaking the AI questionnaire</p>
           </div>
 
           {/* Save Button */}

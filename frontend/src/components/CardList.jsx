@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import  {Link} from "react-router"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Star } from "lucide-react"
+import { useAuthStore } from '../store/authStore'
 
 const CardList = ({ title, category }) => {
    const [data, setData] = useState([]);
    const [swiperRef, setSwiperRef] = useState(null);
+   const { user } = useAuthStore();
 
   // ✅ Use your environment variable for the TMDB token
   const token = import.meta.env.VITE_TMDB_TOKEN;
@@ -39,6 +41,7 @@ const CardList = ({ title, category }) => {
           spaceBetween={20} 
           className="mySwiper"
           onSwiper={setSwiperRef}
+          loop={true}
         >
         <button 
           onClick={() => swiperRef?.slideNext()}
@@ -49,13 +52,22 @@ const CardList = ({ title, category }) => {
         {data?.map((item, index) => (
           <SwiperSlide key={index} className="max-w-72">
             <Link to={`/movie/${item.id}`}>
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`}
-              alt=""
-              className="h-44 w-full object-center object-cover shadow-md"
-            />
+            <div className="relative">
+              <img
+                src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`}
+                alt=""
+                className="h-44 w-full object-center object-cover shadow-md"
+                onError={(e) => {
+                  e.target.src = item.poster_path ? `https://image.tmdb.org/t/p/w500/${item.poster_path}` : '/placeholder-movie.jpg';
+                }}
+              />
+              {user?.favoriteMovies?.includes(item.id) && (
+                <div className="absolute top-2 right-2 bg-black/50 rounded-full p-1">
+                  <Star size={16} className="text-yellow-400" fill="currentColor" />
+                </div>
+              )}
+            </div>
             <p className="text-left pt-2">{item.title}</p>
-
             </Link>
           </SwiperSlide>
         ))}

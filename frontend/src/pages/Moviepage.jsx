@@ -1,13 +1,38 @@
-import { Play } from 'lucide-react';
+import { Play, Star, Heart, Bookmark } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router';
+import { useAuthStore } from '../store/authStore';
 
 const MoviePage = () => {
     const {id} = useParams();
+    const { user, movieAction } = useAuthStore();
     const [movie, setMovie] = useState(null);
     const[recommendations, setRecommendations] = useState([]);
     const [trailerKey, setTrailerKey] = useState(null);
     const [reviews, setReviews] = useState([]);
+    
+    const movieId = parseInt(id);
+    const isFavorited = user?.favoriteMovies?.includes(movieId);
+    const isLiked = user?.likedMovies?.includes(movieId);
+    const isBookmarked = user?.bookmarkedMovies?.includes(movieId);
+    
+    console.log('Movie ID:', movieId);
+    console.log('User favorite movies:', user?.favoriteMovies);
+    console.log('Is favorited:', isFavorited);
+    console.log('Is liked:', isLiked);
+    console.log('Is bookmarked:', isBookmarked);
+    
+    const handleMovieAction = async (action) => {
+        if (!user) return;
+        try {
+            console.log('Before action:', action, 'movieId:', movieId);
+            console.log('Current user state:', user);
+            const result = await movieAction(movieId, action);
+            console.log('Action result:', result);
+        } catch (error) {
+            console.error('Error performing movie action:', error);
+        }
+    };
     
     const token = import.meta.env.VITE_TMDB_TOKEN;
     const options = {
@@ -100,6 +125,40 @@ useEffect(() => {
         </div>
 
         <div className='p-8'>
+          {user && (
+            <div className='flex justify-end mb-4 gap-3'>
+              <button
+                onClick={() => handleMovieAction('favorite')}
+                className={`p-3 rounded-full transition-all duration-200 ${
+                  isFavorited 
+                    ? 'bg-yellow-500 text-white' 
+                    : 'bg-gray-700 text-gray-300 hover:bg-yellow-500 hover:text-white'
+                }`}
+              >
+                <Star size={20} fill={isFavorited ? '#eab308' : 'none'} />
+              </button>
+              <button
+                onClick={() => handleMovieAction('like')}
+                className={`p-3 rounded-full transition-all duration-200 ${
+                  isLiked 
+                    ? 'bg-red-500 text-white' 
+                    : 'bg-gray-700 text-gray-300 hover:bg-red-500 hover:text-white'
+                }`}
+              >
+                <Heart size={20} fill={isLiked ? '#ef4444' : 'none'} />
+              </button>
+              <button
+                onClick={() => handleMovieAction('bookmark')}
+                className={`p-3 rounded-full transition-all duration-200 ${
+                  isBookmarked 
+                    ? 'bg-blue-500 text-white' 
+                    : 'bg-gray-700 text-gray-300 hover:bg-blue-500 hover:text-white'
+                }`}
+              >
+                <Bookmark size={20} fill={isBookmarked ? '#3b82f6' : 'none'} />
+              </button>
+            </div>
+          )}
           <h2 className='text-2xl font-semibold mb-4'>Details</h2>
           <div className='bg-[#232323] rounded-lg shadow-lg p-6 flex fle-col md:flex-row gap-8'>
             <div className='flex-1'>

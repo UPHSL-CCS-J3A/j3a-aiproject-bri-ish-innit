@@ -13,7 +13,7 @@ import { useAuthStore } from '../store/authStore'
 const Homepage = () => {
   const { user } = useAuthStore()
   const [isLoading, setIsLoading] = useState(true)
-  const hasPreferenceTags = user?.recommendationTags && user.recommendationTags.length > 0
+  const hasPreferenceTags = (user?.recommendationTags && user.recommendationTags.length > 0) || (user?.questionnairePreferences && user.questionnairePreferences.length > 0) || (user?.favoriteMovies && user.favoriteMovies.length > 0)
   const supportIndie = user?.supportIndie ?? true // Default to true if not set
   const allowAdultContent = user?.allowAdultContent || false
 
@@ -49,16 +49,18 @@ const Homepage = () => {
           <div className='p-5'>
           {/* <Hero /> */}
           {hasPreferenceTags && (
-            <PersonalRecommendations userTags={user.recommendationTags} allowAdultContent={allowAdultContent} />
+            <PersonalRecommendations userTags={user.recommendationTags || user.questionnairePreferences} allowAdultContent={allowAdultContent} favoriteMovies={user.favoriteMovies} />
           )}
           </div>
-          <HiddenGemsSection allowAdultContent={allowAdultContent} supportIndie={supportIndie} userId={user?._id} />
+          {user && (
+            <HiddenGemsSection allowAdultContent={allowAdultContent} supportIndie={supportIndie} userId={user?._id} />
+          )}
           <div className='p-5'>
           <WorldCinema allowAdultContent={allowAdultContent} />
           <CardList title="NOW PLAYING" category="now_playing" />
           <CardList title="TOP RATED" category="top_rated" />
           <CardList title="POPULAR" category="popular" />
-          <CardList title="UPCOMING" category="upcoming" />
+          <CardList title="UPCOMING" category="upcoming" /> 
           </div>
         </div>
         <ScrollBlur />

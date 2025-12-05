@@ -182,7 +182,7 @@ app.post("/api/logout", async (req, res) => {
 
 app.put("/api/update-profile", async (req, res) => {
   const { token } = req.cookies;
-  const { profilePicture, displayName, recommendationTags, supportIndie, allowAdultContent } = req.body;
+  const { profilePicture, displayName, recommendationTags, supportIndie, allowAdultContent, questionnairePreferences } = req.body;
 
   if (!token) {
     return res.status(401).json({ message: "No token provided." });
@@ -191,15 +191,17 @@ app.put("/api/update-profile", async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
+    const updateData = {};
+    if (profilePicture !== undefined) updateData.profilePicture = profilePicture;
+    if (displayName !== undefined) updateData.displayName = displayName;
+    if (recommendationTags !== undefined) updateData.recommendationTags = recommendationTags;
+    if (supportIndie !== undefined) updateData.supportIndie = supportIndie;
+    if (allowAdultContent !== undefined) updateData.allowAdultContent = allowAdultContent;
+    if (questionnairePreferences !== undefined) updateData.questionnairePreferences = questionnairePreferences;
+    
     const updatedUser = await User.findByIdAndUpdate(
       decoded.id,
-      {
-        profilePicture: profilePicture || '',
-        displayName: displayName || '',
-        recommendationTags: recommendationTags || [],
-        supportIndie: supportIndie || false,
-        allowAdultContent: allowAdultContent || false
-      },
+      updateData,
       { new: true }
     ).select("-password");
 
@@ -210,6 +212,63 @@ app.put("/api/update-profile", async (req, res) => {
     res.status(200).json({ user: updatedUser, message: "Profile updated successfully" });
   } catch (error) {
     console.log("Error updating profile: ", error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+app.post("/api/movie-action", async (req, res) => {
+  const { token } = req.cookies;
+  const { movieId, action } = req.body;
+
+  if (!token) {
+    return res.status(401).json({ message: "No token provided." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found." });
+    }
+
+    let updateField;
+    switch (action) {
+      case 'favorite':
+        updateField = 'favoriteMovies';
+        break;
+      case 'like':
+        updateField = 'likedMovies';
+        break;
+      case 'bookmark':
+        updateField = 'bookmarkedMovies';
+        break;
+      default:
+        return res.status(400).json({ message: "Invalid action" });
+    }
+
+    const movieExists = user[updateField].includes(movieId);
+    let updatedUser;
+
+    if (movieExists) {
+      // Remove movie from list
+      updatedUser = await User.findByIdAndUpdate(
+        decoded.id,
+        { $pull: { [updateField]: movieId } },
+        { new: true }
+      ).select("-password");
+    } else {
+      // Add movie to list
+      updatedUser = await User.findByIdAndUpdate(
+        decoded.id,
+        { $addToSet: { [updateField]: movieId } },
+        { new: true }
+      ).select("-password");
+    }
+
+    res.status(200).json({ user: updatedUser, added: !movieExists });
+  } catch (error) {
+    console.log("Error in movie action: ", error.message);
     res.status(400).json({ message: error.message });
   }
 });

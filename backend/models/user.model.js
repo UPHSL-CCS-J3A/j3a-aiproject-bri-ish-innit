@@ -7,8 +7,12 @@ const userSchema = mongoose.Schema({
     profilePicture: {type: String, default: ''},
     displayName: {type: String, default: ''},
     recommendationTags: [{type: String}],
+    questionnairePreferences: [{type: String}],
     supportIndie: {type: Boolean, default: true},
     allowAdultContent: {type: Boolean, default: false},
+    favoriteMovies: [{type: Number}],
+    likedMovies: [{type: Number}],
+    bookmarkedMovies: [{type: Number}],
 }, {
     timestamps: true
 });

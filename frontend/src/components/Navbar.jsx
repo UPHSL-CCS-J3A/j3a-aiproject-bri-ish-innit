@@ -45,12 +45,7 @@ const Navbar = () => {
         </Link>
 
 
-        <ul className='hidden xl:flex space-x-6'>
-            <li><Link to="/" className='cursor-pointer hover:text-white transition-colors duration-200'>Home</Link></li>
-            <li><Link to="/tv-shows" className='cursor-pointer hover:text-white transition-colors duration-200'>TV Shows</Link></li>
-            <li><Link to="/movies" className='cursor-pointer hover:text-white transition-colors duration-200'>Movies</Link></li>
-            <li><Link to="/anime" className='cursor-pointer hover:text-white transition-colors duration-200'>Anime</Link></li>
-        </ul>
+
 
 
         <div className='flex items-center space-x-4 relative'>
@@ -88,11 +83,6 @@ const Navbar = () => {
                                     <p className="text-xs text-gray-600">{user.email}</p>
                                 </div>
 
-                                <button className="flex items-center px-4 py-3 rounded-lg text-black bg-[#ffffff] hover:bg-gray-100 gap-3 cursor-pointer">
-                                    <HelpCircle size={25} />
-                                    <span>Help Center</span>
-                                </button>
-
                                 <Link to="/profile" onClick={() => setShowMenu(false)} className="flex items-center px-4 py-3 rounded-lg text-black bg-[#ffffff] hover:bg-gray-100 gap-3 cursor-pointer">
                                     <User size={25} />
                                     <span>View Profile</span>
@@ -102,6 +92,11 @@ const Navbar = () => {
                                     <Settings size={25} />
                                     <span>Settings</span>
                                 </Link>
+
+                                <button className="flex items-center px-4 py-3 rounded-lg text-black bg-[#ffffff] hover:bg-gray-100 gap-3 cursor-pointer">
+                                    <HelpCircle size={25} />
+                                    <span>Help Center</span>
+                                </button>
 
                                 <button onClick={handleLogOut} className="flex items-center px-4 py-3 rounded-lg text-black bg-[#ffffff] hover:bg-gray-100 gap-3 cursor-pointer">
                                     <LogOut size={25} />
