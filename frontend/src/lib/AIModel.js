@@ -1,8 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({
+const ai = import.meta.env.VITE_GOOGLE_GENAI_API_KEY ? new GoogleGenAI({
     apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY
-})
+}) : null
 const config = {
     responseMimeType: 'text/plain',
 };
@@ -10,6 +10,12 @@ const model = "gemini-2.5-pro";
 
 export async function getAIRecommendations(prompt) {
     console.log("AI function called with API key:", import.meta.env.VITE_GOOGLE_GENAI_API_KEY ? "Present" : "Missing");
+    
+    if (!ai) {
+        console.warn("AI not initialized - API key missing");
+        return "AI recommendations unavailable. Please add your Google Gemini API key to the .env file.";
+    }
+    
     try {
         const response = await ai.models.generateContent({
             model,

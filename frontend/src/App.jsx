@@ -28,7 +28,20 @@ const App = () => {
 
   return (
     <div>
-      <Toaster />
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          style: {
+            margin: '0px',
+          },
+        }}
+        containerStyle={{
+          top: 20,
+          right: 20,
+          bottom: 20,
+          left: 20,
+        }}
+      />
       <Navbar />
 
       <Routes>

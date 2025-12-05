@@ -1,5 +1,9 @@
 {
   "type": "module",
+  "scripts": {
+    "start": "node CineCompassServer.js",
+    "dev": "nodemon CineCompassServer.js"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",

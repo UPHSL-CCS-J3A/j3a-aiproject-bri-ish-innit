@@ -1,13 +1,14 @@
 import { HelpCircle, LogOut, Search, Settings } from "lucide-react"
-import Logo from "../assets/logo.png"   
+// import Logo from "../assets/logo.png"   
 import { Link } from "react-router"
 import { useAuthStore } from "../store/authStore";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {toast} from "react-hot-toast";
 
 const Navbar = () => {
     const {user, logout} = useAuthStore();
     const [showMenu, setShowMenu] = useState(false);
+    const menuRef = useRef(null);
 
     const avatarUrl = user ? `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.username)}&backgroundColor=0A2472&textColor=ffffff` : "";
 
@@ -18,13 +19,29 @@ const Navbar = () => {
         setShowMenu(false)
     }
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setShowMenu(false);
+            }
+        };
+
+        if (showMenu) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showMenu]);
+
 
 
   return (
-    <nav className="bg-[#496595] text-gray-200 flex items-center justify-between items-center p-4 h-20 text-sm md:text-[15px] font-medium text-nowrap">
+    <nav className="bg-gradient-to-r from-[#7a051d] to-[#d2172d] text-gray-200 flex items-center justify-between items-center p-4 h-14 text-sm md:text-[15px] font-medium text-nowrap" style={{boxShadow: '0 6px 20px rgba(0, 0, 0, 0.15)'}}>
         
         <Link to="/">
-        <img src={Logo} alt="CineCompass Logo" className="w-24 cursor-pointer brightness-125 cursor-pointer" />
+        <img src="/cc-icon-logo.png" alt="CineCompass Logo" className="w-12 cursor-pointer brightness-125 cursor-pointer" />
         </Link>
 
 
@@ -57,7 +74,7 @@ const Navbar = () => {
                     </button>
                 </Link>
                 ) : (
-                     <div className="relative">
+                     <div className="relative" ref={menuRef}>
                         <img src={avatarUrl} alt={user.username} className="w-10 h-10 rounded-full border-2 border-[#03045E] cursor-pointer hover:border-white transition-colors duration-200"
                         onClick={() => {
                             console.log('Avatar clicked, showMenu:', showMenu);
@@ -65,8 +82,9 @@ const Navbar = () => {
                         }}
                         />
 
-                        {showMenu && (
-                            <div className="absolute right-0 mt-2 w-64 bg-white bg-opacity-95 py-4 px-3 flex flex-col gap-2 border border-[#333333] text-black rounded-lg shadow-lg z-50">
+                        <div className={`absolute right-0 mt-2 w-64 bg-white bg-opacity-95 py-4 px-3 flex flex-col gap-2 border border-[#333333] text-black rounded-lg shadow-lg z-50 transition-all duration-300 origin-top-right ${
+                            showMenu ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
+                        }`}>
                                 <div className="flex flex-col items-center border-b pb-2 mb-2">
                                     <p className="text-black font-semibold text-base ">{user.username}</p>
                                     <p className="text-xs text-gray-600">{user.email}</p>
@@ -88,7 +106,6 @@ const Navbar = () => {
                                 </button>
 
                             </div>
-                            )}
                      </div>
              )}
         </div>

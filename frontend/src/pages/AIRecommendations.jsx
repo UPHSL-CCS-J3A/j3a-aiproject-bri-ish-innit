@@ -32,8 +32,6 @@ const initialState = steps.reduce((acc, step) => {
     return acc
 }, {});
 
-
-
 const AIRecommendations = () => {
 
     const [inputs, setInputs] = useState(initialState);
@@ -140,6 +138,12 @@ Recommend 10 ${inputs.mood.toLowerCase()} ${
             <div className='w-full max-w-7xl mx-auto mt-2'>
                 <h2 className="text-2xl font-bold mb-4 text-center text-black">AI Recommended Movies</h2>
              <RecommendedMovies movieTitles={recommendation} />
+            </div>
+        ) : isLoading ? (
+            <div className='relative w-full max-w-md mx-auto rounded-2xl bg-[#caf0f8]/90 shadow-2xl border-3 border-[#333] px-8 py-10 mt-4 flex flex-col items-center justify-center min-h-[480px]'>
+                <div className='animate-spin rounded-full h-16 w-16 border-b-2 border-[#023e8a] mb-4'></div>
+                <h3 className='text-xl font-semibold text-black mb-2'>Generating Recommendations...</h3>
+                <p className='text-gray-600 text-center'>Our AI is analyzing your preferences to find the perfect movies for you.</p>
             </div>
         ) : (
             <div className='relative w-full max-w-md mx-auto rounded-2xl bg-[#caf0f8]/90 shadow-2xl border-3 border-[#333] px-8 py-10 mt-4 flex flex-col items-center min-h-[480px] '>
