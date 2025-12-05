@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import toast from 'react-hot-toast';
 import { getAIRecommendations } from '../lib/AIModel';
 import RecommendedMovies from '../components/RecommendedMovies';
@@ -33,12 +34,40 @@ const initialState = steps.reduce((acc, step) => {
 }, {});
 
 const AIRecommendations = () => {
-
+    const location = useLocation();
     const [inputs, setInputs] = useState(initialState);
     const [step, setStep] = useState(0);
     const [error, setError] = useState("");
     const [recommendation, setRecommendation] = useState([]);
-    const [isLoading, setIsLoading] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search);
+        const genres = urlParams.get('genres');
+        if (genres) {
+            generateGenreRecommendations(genres.split(','));
+        }
+    }, [location]);
+
+    const generateGenreRecommendations = async (selectedGenres) => {
+        setIsLoading(true);
+        const userPrompt = `Recommend 10 movies based on these genres: ${selectedGenres.join(', ')}. Return the list as plain JSON array of movie titles only, No extra text, no explanations, no code blocks, no markdown, just the JSON array.\nexample:\n[\n  "Movie Title 1",\n  "Movie Title 2",\n  "Movie Title 3",\n  "Movie Title 4",\n  "Movie Title 5",\n  "Movie Title 6",\n  "Movie Title 7",\n  "Movie Title 8",\n  "Movie Title 9",\n  "Movie Title 10"\n]`;
+        
+        const result = await getAIRecommendations(userPrompt);
+        setIsLoading(false);
+        
+        if (result) {
+            const cleanedResult = result.replace(/```json\n/i, '').replace(/\n```/i, '');
+            try {
+                const recommendationArray = JSON.parse(cleanedResult);
+                setRecommendation(recommendationArray);
+            } catch (error) {
+                toast.error('Failed to parse recommendations');
+            }
+        } else {
+            toast.error('Failed to get recommendations');
+        }
+    }; 
 
     const handleOption = (value) => {
         setInputs({...inputs, [steps[step].name]: value});

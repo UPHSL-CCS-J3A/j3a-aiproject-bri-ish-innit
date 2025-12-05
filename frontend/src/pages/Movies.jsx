@@ -1,5 +1,6 @@
 import CardList from '../components/CardList'
 import Footer from '../components/Footer'
+import AIRecommendationShortcut from '../components/ScrollToTop'
 
 const Movies = () => {
   return (
@@ -13,6 +14,7 @@ const Movies = () => {
         <CardList title="Top Rated Movies" category="top_rated" />
         <CardList title="Upcoming Movies" category="upcoming" />
         <Footer />
+        <AIRecommendationShortcut />
     </div>
   )
 }

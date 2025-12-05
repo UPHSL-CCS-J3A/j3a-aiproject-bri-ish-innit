@@ -1,4 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ChevronDown } from 'lucide-react'
 import LiquidEther from './LiquidEther'
 
 const allGenres = [
@@ -10,9 +12,24 @@ const getRandomGenres = () => {
   return shuffled.slice(0, 12);
 };
 
-const GetAIRecommendation = () => {
+const GetAIRecommendation = ({ isLoading }) => {
+  const navigate = useNavigate();
   const [genres] = useState(() => getRandomGenres());
   const [selectedGenres, setSelectedGenres] = useState([]);
+  const [showScrollArrow, setShowScrollArrow] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.pageYOffset > 100) {
+        setShowScrollArrow(false);
+      } else {
+        setShowScrollArrow(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleGenre = (genre) => {
     setSelectedGenres(prev => 
@@ -38,34 +55,52 @@ const GetAIRecommendation = () => {
       {liquidEtherComponent}
       <div className='absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/60 to-transparent pointer-events-none'></div>
       
-      <div className='absolute inset-0 flex flex-col justify-center items-center p-8'>
-        <img src='/cinecompass-main.png' alt='CineCompass' className='max-w-4xl h-auto mb-8' />
-        
-        
-        <div className='flex flex-wrap gap-3 justify-center max-w-4xl'>
-          {genres.map((genre) => (
-            <button
-              key={genre}
-              onClick={() => toggleGenre(genre)}
-              className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${
-                selectedGenres.includes(genre)
-                  ? 'bg-white text-purple-600 shadow-lg transform scale-105'
-                  : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm'
-              }`}
-            >
-              {genre}
-            </button>
-          ))}
-        </div>
-        
-        {selectedGenres.length > 0 && (
-          <div className='mt-6'>
-            <button className='bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-full font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg'>
-              Get Recommendations ({selectedGenres.length} selected)
-            </button>
+      <div className='absolute inset-0 flex items-center justify-center'>
+        {isLoading ? (
+          <div className='animate-spin rounded-full h-16 w-16 border-b-2 border-white'></div>
+        ) : (
+          <div className='flex flex-col justify-center items-center p-8 opacity-0 animate-fade-in'>
+            <img src='/cinecompass-main.png' alt='CineCompass' className='max-w-4xl h-auto mb-8' />
+            
+            <div className='flex flex-wrap gap-3 justify-center max-w-4xl'>
+              {genres.map((genre) => (
+                <button
+                  key={genre}
+                  onClick={() => toggleGenre(genre)}
+                  className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${
+                    selectedGenres.includes(genre)
+                      ? 'bg-white text-purple-600 shadow-lg transform scale-105'
+                      : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm'
+                  }`}
+                >
+                  {genre}
+                </button>
+              ))}
+            </div>
+            
+            {selectedGenres.length > 0 && (
+              <div className='mt-6'>
+                <button 
+                  onClick={() => navigate(`/ai-recommendations?genres=${selectedGenres.join(',')}`)}
+                  className='bg-gradient-to-r from-[#7a051d] to-[#d2172d] text-white px-8 py-3 rounded-full font-semibold hover:from-[#6a0419] hover:to-[#b8152a] transition-all duration-200 shadow-lg'
+                >
+                  Navigate ({selectedGenres.length} selected)
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
+      
+      {/* Scroll Down Arrow */}
+      <button 
+        onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+        className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-opacity duration-300 cursor-pointer hover:scale-110 ${
+          showScrollArrow && !isLoading ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <ChevronDown className="text-white w-8 h-8 animate-bounce" />
+      </button>
     </div>
   )
 }

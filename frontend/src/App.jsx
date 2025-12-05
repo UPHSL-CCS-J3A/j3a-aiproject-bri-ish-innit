@@ -7,12 +7,12 @@ import SignUp from './pages/SignUp'
 import TVShows from './pages/TVShows'
 import Movies from './pages/Movies'
 import Anime from './pages/Anime'
-import NewPopular from './pages/NewPopular'
-import Upcoming from './pages/Upcoming'
 import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from './store/authStore';
 import { useEffect } from 'react'
 import AIRecommendations from './pages/AIRecommendations'
+import Profile from './pages/Profile'
+import Settings from './pages/Settings'
 
 
 const App = () => {
@@ -49,12 +49,12 @@ const App = () => {
         <Route path={"/tv-shows"} element={<TVShows />} />
         <Route path={"/movies"} element={<Movies />} />
         <Route path={"/anime"} element={<Anime />} />
-        <Route path={"/new-popular"} element={<NewPopular />} />
-        <Route path={"/upcoming"} element={<Upcoming />} />
         <Route path={"/movie/:id"} element={<MoviePage />} />
         <Route path={"/signin"} element={<SignIn />} />
         <Route path={"/signup"} element={<SignUp />} />
         <Route path={"/ai-recommendations"} element={<AIRecommendations />} />
+        <Route path={"/profile"} element={<Profile />} />
+        <Route path={"/settings"} element={<Settings />} />
       </Routes>
     </div>
   )

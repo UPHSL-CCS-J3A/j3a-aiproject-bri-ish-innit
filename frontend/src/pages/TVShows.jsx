@@ -1,5 +1,6 @@
 import CardList from '../components/CardList'
 import Footer from '../components/Footer'
+import AIRecommendationShortcut from '../components/ScrollToTop'
 
 const TVShows = () => {
   return (
@@ -13,6 +14,7 @@ const TVShows = () => {
         <CardList title="Airing Today" category="airing_today" type="tv" />
         <CardList title="On The Air" category="on_the_air" type="tv" />
         <Footer />
+        <AIRecommendationShortcut />
     </div>
   )
 }

@@ -15,7 +15,7 @@ const SignUp = () => {
     
     try{
       await signup(username, email, password);
-      navigate("/");
+      navigate("/ai-recommendations");
     }catch(error){
       console.log(error);
     }

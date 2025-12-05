@@ -1,4 +1,4 @@
-import { HelpCircle, LogOut, Search, Settings } from "lucide-react"
+import { HelpCircle, LogOut, Search, Settings, User } from "lucide-react"
 // import Logo from "../assets/logo.png"   
 import { Link } from "react-router"
 import { useAuthStore } from "../store/authStore";
@@ -10,7 +10,7 @@ const Navbar = () => {
     const [showMenu, setShowMenu] = useState(false);
     const menuRef = useRef(null);
 
-    const avatarUrl = user ? `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.username)}&backgroundColor=0A2472&textColor=ffffff` : "";
+    const avatarUrl = user?.profilePicture || (user ? `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.username)}&backgroundColor=0A2472&textColor=ffffff` : "");
 
 
     const handleLogOut = async () => {
@@ -50,8 +50,6 @@ const Navbar = () => {
             <li><Link to="/tv-shows" className='cursor-pointer hover:text-white transition-colors duration-200'>TV Shows</Link></li>
             <li><Link to="/movies" className='cursor-pointer hover:text-white transition-colors duration-200'>Movies</Link></li>
             <li><Link to="/anime" className='cursor-pointer hover:text-white transition-colors duration-200'>Anime</Link></li>
-            <li><Link to="/new-popular" className='cursor-pointer hover:text-white transition-colors duration-200'>New & Popular</Link></li>
-            <li><Link to="/upcoming" className='cursor-pointer hover:text-white transition-colors duration-200'>Upcoming</Link></li>
         </ul>
 
 
@@ -61,11 +59,11 @@ const Navbar = () => {
             <Search className="absolute top-2 right-4 w-5 h-5" />    
             </div>
 
-            <Link to={user ? "ai-recommendations" : "signin"}>
+            {/* <Link to={user ? "ai-recommendations" : "signin"}>
                 <button className='bg-[#0A2472] hover:bg-[#90a7c4] px-5 py-2 text-white cursor-pointer transition-colors duration-200'>
                     Get AI Movie Picks
                 </button>
-            </Link>
+            </Link> */}
 
                 {!user ? (
                     <Link to="/signin">
@@ -75,7 +73,7 @@ const Navbar = () => {
                 </Link>
                 ) : (
                      <div className="relative" ref={menuRef}>
-                        <img src={avatarUrl} alt={user.username} className="w-10 h-10 rounded-full border-2 border-[#03045E] cursor-pointer hover:border-white transition-colors duration-200"
+                        <img src={avatarUrl} alt={user.username} className="w-10 h-10 rounded-full border-2 border-[#03045E] cursor-pointer hover:border-white transition-colors duration-200 object-cover"
                         onClick={() => {
                             console.log('Avatar clicked, showMenu:', showMenu);
                             setShowMenu(!showMenu);
@@ -95,10 +93,15 @@ const Navbar = () => {
                                     <span>Help Center</span>
                                 </button>
 
-                                <button className="flex items-center px-4 py-3 rounded-lg text-black bg-[#ffffff] hover:bg-gray-100 gap-3 cursor-pointer">
+                                <Link to="/profile" onClick={() => setShowMenu(false)} className="flex items-center px-4 py-3 rounded-lg text-black bg-[#ffffff] hover:bg-gray-100 gap-3 cursor-pointer">
+                                    <User size={25} />
+                                    <span>View Profile</span>
+                                </Link>
+
+                                <Link to="/settings" onClick={() => setShowMenu(false)} className="flex items-center px-4 py-3 rounded-lg text-black bg-[#ffffff] hover:bg-gray-100 gap-3 cursor-pointer">
                                     <Settings size={25} />
                                     <span>Settings</span>
-                                </button>
+                                </Link>
 
                                 <button onClick={handleLogOut} className="flex items-center px-4 py-3 rounded-lg text-black bg-[#ffffff] hover:bg-gray-100 gap-3 cursor-pointer">
                                     <LogOut size={25} />

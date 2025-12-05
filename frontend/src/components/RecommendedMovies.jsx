@@ -3,13 +3,15 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 
 const RecommendedMovies = ({movieTitles}) => {
-    const options = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZDEwZDFjMjE1ZWZiYzM5MDM0NmFjMTYwYmNmNjEzMSIsIm5iZiI6MTc2MjkyNjM0Ni4zOTM5OTk4LCJzdWIiOiI2OTE0MWYwYTllMGVkYjU5OWY4NzVkYjgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Jofi4G8TZmO-AgfhbHl5Fs-QqSBb1TnGXOHRy_r-lhw'
-  }
-};
+  const token = import.meta.env.VITE_TMDB_TOKEN;
+  
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  };
 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);

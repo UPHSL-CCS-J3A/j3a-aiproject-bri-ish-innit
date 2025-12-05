@@ -7,17 +7,24 @@ const MoviePage = () => {
     const [movie, setMovie] = useState(null);
     const[recommendations, setRecommendations] = useState([]);
     const [trailerKey, setTrailerKey] = useState(null);
+    const [reviews, setReviews] = useState([]);
     
-
-const API_KEY = '7d10d1c215efbc390346ac160bcf6131';
+    const token = import.meta.env.VITE_TMDB_TOKEN;
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    };
 
 useEffect(() => {
-    fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`)
+    fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options)
     .then(res => res.json())
     .then(res => setMovie(res))
     .catch(err => console.error(err));
 
-    fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${API_KEY}&language=en-US&page=1`)
+    fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations?language=en-US&page=1`, options)
       .then(res => res.json())
       .then(res => {
         console.log('Recommendations:', res);
@@ -26,12 +33,18 @@ useEffect(() => {
       .then(() => console.log('Recommendations length:', recommendations.length))
       .catch(err => console.error(err));
 
-
-    fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`)
+    fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
       .then(res => res.json())
       .then(res => {
           const trailer = res.results?.find((vid) => vid.site === "YouTube" && vid.type === "Trailer")
           setTrailerKey(trailer?.key || null);
+      })
+      .catch(err => console.error(err));
+
+    fetch(`https://api.themoviedb.org/3/movie/${id}/reviews?language=en-US&page=1`, options)
+      .then(res => res.json())
+      .then(res => {
+        setReviews(res.results?.slice(0, 3) || []);
       })
       .catch(err => console.error(err));
 }, [id]);
@@ -145,6 +158,40 @@ useEffect(() => {
           </div>
 
         </div>
+
+        {reviews.length > 0 && (
+          <div className='p-8'>
+            <h2 className='text-2xl font-semibold mb-4'>User Reviews</h2>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+              {reviews.map((review) => (
+                <div key={review.id} className='bg-[#232323] rounded-lg p-4'>
+                  <div className='flex items-center mb-2'>
+                    <div className='w-8 h-8 bg-gradient-to-r from-[#7a051d] to-[#d2172d] rounded-full flex items-center justify-center text-white font-bold mr-2 text-sm'>
+                      {review.author.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h4 className='font-semibold text-white text-sm'>{review.author}</h4>
+                      {review.author_details?.rating && (
+                        <div className='flex items-center text-xs text-gray-400'>
+                          <span>⭐ {review.author_details.rating}/10</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <p className='text-gray-200 leading-relaxed text-sm'>
+                    {review.content.length > 200 
+                      ? `${review.content.substring(0, 200)}...` 
+                      : review.content
+                    }
+                  </p>
+                  <div className='mt-2 text-xs text-gray-400'>
+                    {new Date(review.created_at).toLocaleDateString()}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {recommendations.length > 0 && (
           <div className='p-8'>

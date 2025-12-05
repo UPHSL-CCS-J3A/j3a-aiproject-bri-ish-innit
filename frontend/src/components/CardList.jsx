@@ -54,7 +54,7 @@ const CardList = ({ title, category }) => {
               alt=""
               className="h-44 w-full object-center object-cover shadow-md"
             />
-            <p className="text-left pt-2">{item.original_title}</p>
+            <p className="text-left pt-2">{item.title}</p>
 
             </Link>
           </SwiperSlide>
