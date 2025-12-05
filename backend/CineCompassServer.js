@@ -180,6 +180,40 @@ app.post("/api/logout", async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
+app.put("/api/update-profile", async (req, res) => {
+  const { token } = req.cookies;
+  const { profilePicture, displayName, recommendationTags, supportIndie, allowAdultContent } = req.body;
+
+  if (!token) {
+    return res.status(401).json({ message: "No token provided." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    const updatedUser = await User.findByIdAndUpdate(
+      decoded.id,
+      {
+        profilePicture: profilePicture || '',
+        displayName: displayName || '',
+        recommendationTags: recommendationTags || [],
+        supportIndie: supportIndie || false,
+        allowAdultContent: allowAdultContent || false
+      },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(400).json({ message: "User not found." });
+    }
+
+    res.status(200).json({ user: updatedUser, message: "Profile updated successfully" });
+  } catch (error) {
+    console.log("Error updating profile: ", error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+
 
 app.listen(PORT, () => {
   connectToDB();
